@@ -77,10 +77,13 @@
 
 (defn transact
   "runs a Domino transaction using the value from the specified component as the input"
-  [db [_ ctx-id component-id value]]
+  [db [_ ctx-id & id-value-pairs]]
   (update-in db [::contexts ctx-id]
              domino/transact
-             [[(get-in db [::contexts ctx-id ::domino/model :id->path component-id]) value]]))
+             (map
+               (fn [[component-id value]]
+                 [(get-in db [::contexts ctx-id ::domino/model :id->path component-id]) value])
+               id-value-pairs)))
 
 (rf/reg-event-db ::id transact)
 
