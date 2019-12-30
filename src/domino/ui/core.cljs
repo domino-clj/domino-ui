@@ -95,7 +95,7 @@
 (defn trigger-effects
   "trigger the specified effects"
   [db [_ ctx-id effect-ids]]
-  (domino/trigger-effects (get-in db [::contexts ctx-id]) effect-ids))
+  (update-in db [::contexts ctx-id] domino/trigger-effects effect-ids))
 
 (rf/reg-event-db
  ::trigger trigger-effects)
