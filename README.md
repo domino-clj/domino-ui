@@ -1,5 +1,7 @@
 # domino-ui
 
+[![Clojars Project](https://img.shields.io/clojars/v/domino/ui.svg)](https://clojars.org/domino/ui)
+
 A UI component library built on top of re-frame and Domino. The library provides a multimethod for declaring UI components along with re-frame events and subscriptions for managing the state of these components.
 
 ## Usage
