@@ -29,7 +29,7 @@
                     (filter second)
                     (into {})))))
 
-(rf/reg-event-db ::merge-component-state update-component-state)
+(rf/reg-event-db ::merge-component-state merge-component-state)
 
 (defn update-component-state
   "update the state of a component using a user provided function that accepts the current state"
