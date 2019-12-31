@@ -44,8 +44,7 @@ we will write the following multimethod to instantiate the component:
 
 The multimethod will receive the vector declaration for the component and create a Reagent component function using it.
 
-Note that domino-ui supports multiple Domino contexts, and the context for the specific component will be injected
-in the component options map when components are parsed.
+Note that domino-ui supports multiple Domino contexts, and the context for each component will be injected into the options map when the engine is initialized.
 
 ## Reading/Writing Component State
 
