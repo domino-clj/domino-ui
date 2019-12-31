@@ -26,6 +26,13 @@
                                        (fn [current-state]
                                          (update current-state :disabled? not))])}
                         "toggle first name enabled"]
+                       
+                       [:button
+                        {:on-click #(rf/dispatch
+                                     [::core/trigger
+                                      :default-ctx
+                                      [:gen-text]])}
+                        "toggle first name enabled"]
 
                        [:div
                         [:label "Last name"]
@@ -39,8 +46,13 @@
    :model   [[:demographics
               [:first-name {:id :first-name}]
               [:last-name {:id :last-name}]
-              [:full-name {:id :full-name}]]]
-   :effects [{:inputs  [:first-name]
+              [:full-name {:id :full-name}]]
+             [:text {:id :text}]]
+   :effects [{:id :gen-text 
+              :outputs [:text]
+              :handler (fn [_ state]
+                         (assoc state :text "hello"))}
+             {:inputs  [:first-name]
               :handler (fn [_ {:keys [first-name]}]
                          (rf/dispatch [::core/update-component-state
                                        :default-ctx
@@ -79,7 +91,7 @@
   [:div
    [:h3 "default context"]
    #_[:pre (pprint @(rf/subscribe [::core/ctx :default-ctx]))]
-   @(rf/subscribe [::core/view :default-ctx :default])
+   @(rf/subscribe [::core/view :default-ctx :default])   
    [:hr]
    [:label "component states"]
    [:pre (pprint @(rf/subscribe [::core/component-states :default-ctx]))]

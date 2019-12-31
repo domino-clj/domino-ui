@@ -38,8 +38,8 @@ we will write the following multimethod to instantiate the component:
       [:input
        {:type      :text
         :disabled  disabled?
-        :value     @(rf/subscribe [::core/id context id])
-        :on-change #(rf/dispatch [::core/id context id (-> % .-target .-value)])}])))   
+        :value     @(rf/subscribe [::core/subscribe context id])
+        :on-change #(rf/dispatch [::core/transact context id (-> % .-target .-value)])}])))   
 ```
 
 Note that domino-ui supports multiple Domino contexts, and the context for the specific component will be injected
@@ -54,11 +54,10 @@ The state of the component can be modified using the `:domino.ui.core/merge-comp
 events. The merge event accepts Domino context, component id, and a map containing the new state that will be merged on top of the current state.
 The update event accepts the Domino context, component id, and a function that should accept the current state of the component and return an updated one.
 
-The value of the component is read using the `:domino.ui.core/id` subscription and passing it the Domino context and the component id matching one
+The value of the component is read using the `:domino.ui.core/subscribe` subscription and passing it the Domino context and the component id matching one
 of the components specified in the options map. In this case, the id is `:first-name`.
 
-Finally, the component updates the current value in the model associated with the component using the `:domino.ui.core/id` event.
-This event accepts the Domino context followed by the value.
+Finally, the component updates the current value in the model associated with the component using the `:domino.ui.core/transact` event. This event accepts the Domino context followed by the value.
 
 Once the component is declared we can create a Domino schema and add a `:views` key to it. This key will contain a map of view
 declarations, e.g:

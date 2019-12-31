@@ -14,8 +14,8 @@
       [:input
        {:type      :text
         :disabled  disabled?
-        :value     @(rf/subscribe [::core/id context id])
-        :on-change #(rf/dispatch [::core/id context id (-> % .-target .-value)])}])))
+        :value     @(rf/subscribe [::core/subscribe context id])
+        :on-change #(rf/dispatch [::core/transact context [id (-> % .-target .-value)]])}])))
 
 (defmethod component ::c/container [[_ {:keys [context title render]} & body]]
   (fn []

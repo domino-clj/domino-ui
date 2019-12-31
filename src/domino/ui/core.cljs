@@ -85,7 +85,7 @@
                  [(get-in db [::contexts ctx-id ::domino/model :id->path component-id]) value])
                id-value-pairs)))
 
-(rf/reg-event-db ::id transact)
+(rf/reg-event-db ::transact transact)
 
 (defn get-value
   "gets the value of the specified component"
@@ -93,7 +93,7 @@
   (get-in (get-in db [::contexts ctx-id ::domino/db])
           (get-in db [::contexts ctx-id ::domino/model :id->path component-id])))
 
-(rf/reg-sub ::id get-value)
+(rf/reg-sub ::subscribe get-value)
 
 (defn trigger-effects
   "trigger the specified effects"
