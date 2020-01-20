@@ -101,14 +101,76 @@ The schema can now be initialized calling the `:domino.ui.core/init-ctx` re-fram
 
 This event will initialize the domino engine with `domino/initialize` and parse/render the domino-ui components used in the views.
 
-Once the view is initialized, it can be used via the `:domino.ui.core/view` subscription:
+Once the view is initialized, it can be used via the `:domino.ui.core/view` subscription.
 
+The following subscriptions are provided:
+
+#### Domino context
 ```clojure
-(defn default-ctx-page []
-  [:div
-   [:h3 "default context"]
-   @(rf/subscribe [::core/view :default-ctx :default])])
+@(rf/subscribe [::core/ctx :default-ctx])
 ```
+#### Domino model
+```clojure
+@(rf/subscribe [::core/model :default-ctx])
+```
+#### view schema
+```clojure
+@(rf/subscribe [::core/view :default-ctx :default])
+```
+#### all views for a given context
+```clojure
+@(rf/subscribe [::core/views :default-ctx])
+```
+#### Domino DB state
+```clojure
+@(rf/subscribe [::core/db :default-ctx])
+```
+#### component state
+```clojure
+@(rf/subscribe [::core/component-state :default-ctx :first-name])
+```
+#### component states
+```clojure
+@(rf/subscribe [::core/component-states :default-ctx])
+```
+#### subscription to the value associated with a UI component
+```clojure
+@(rf/subscribe [::core/subscribe :default-ctx :first-name])
+```
+#### Domino change history for the latest transaction
+```clojure
+@(rf/subscribe [::core/change-history :default-ctx])
+```
+
+Following events are provided
+
+#### initialize Domino context with an initial state
+```clojure
+@(rf/dispatch [::init-ctx :default-ctx default-schema {:demographics
+                                                       {:first-name "Bob"}}])
+```
+
+#### transact values
+```clojure
+@(rf/dispatch [::core/transact :default-ctx
+               [:first-name "Bob"]
+               [:last-name "Bobberton"]])
+```
+#### merge component state
+```clojure
+@(rf/dispatch [::merge-component-state :default-ctx :first-name {:disabled? true}])
+```
+#### update component state
+```clojure
+@(rf/dispatch [::update-component-state :default-ctx :first-name
+               (fn [state-map] (assoc state-map :disabled? true))])
+```
+#### trigger effects
+```clojure
+@(rf/dispatch [::core/trigger :default-ctx [:effect-id]])
+```
+
+
 
 See [here](https://github.com/domino-clj/domino-ui/blob/master/env/dev/cljs/domino-ui/test_page.cljs)
 for a complete example of this in action.

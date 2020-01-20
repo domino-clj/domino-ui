@@ -6,7 +6,7 @@
 
 (defmethod component ::c/label [[_ {:keys [context label id]}]]
   (fn []
-    [:label label " " @(rf/subscribe [::core/id context id])]))
+    [:label label " " @(rf/subscribe [::core/subscribe context id])]))
 
 (defmethod component ::c/text-input [[_ {:keys [context id]}]]
   (fn []

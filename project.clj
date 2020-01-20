@@ -1,4 +1,4 @@
-(defproject domino/ui "0.1.3-SNAPSHOT"
+(defproject domino/ui "0.1.3"
             :description "UI component library for Domino"
             :url "https://github.com/domino-clj/domino-ui"
             :license {:name "Eclipse Public License"
@@ -6,7 +6,7 @@
   :dependencies
   [[org.clojure/clojure "1.10.0" :scope "provided"]
    [org.clojure/clojurescript "1.10.520" :scope "provided"]
-   [domino/core "0.3.1"]
+   [domino/core "0.3.2"]
    [re-frame "0.11.0-rc2"]]
 
   :plugins

@@ -26,13 +26,6 @@
                                        (fn [current-state]
                                          (update current-state :disabled? not))])}
                         "toggle first name enabled"]
-                       
-                       [:button
-                        {:on-click #(rf/dispatch
-                                     [::core/trigger
-                                      :default-ctx
-                                      [:gen-text]])}
-                        "toggle first name enabled"]
 
                        [:div
                         [:label "Last name"]
@@ -42,13 +35,22 @@
                        [:div
                         [::component/label
                          {:id    :full-name
-                          :label "Full name"}]]]}
+                          :label "Full name"}]]
+
+                       [:div
+                        [:button
+                         {:on-click #(rf/dispatch
+                                       [::core/trigger
+                                        :default-ctx
+                                        [:gen-text]])}
+                         "generate text"]
+                        [::component/label {:label "generated text:" :id :text}]]]}
    :model   [[:demographics
               [:first-name {:id :first-name}]
               [:last-name {:id :last-name}]
               [:full-name {:id :full-name}]]
              [:text {:id :text}]]
-   :effects [{:id :gen-text 
+   :effects [{:id :gen-text
               :outputs [:text]
               :handler (fn [_ state]
                          (assoc state :text "hello"))}
@@ -91,10 +93,12 @@
   [:div
    [:h3 "default context"]
    #_[:pre (pprint @(rf/subscribe [::core/ctx :default-ctx]))]
-   @(rf/subscribe [::core/view :default-ctx :default])   
+   @(rf/subscribe [::core/view :default-ctx :default])
    [:hr]
    [:label "component states"]
    [:pre (pprint @(rf/subscribe [::core/component-states :default-ctx]))]
+   [:label "change history"]
+   [:pre (pprint @(rf/subscribe [::core/change-history :default-ctx]))]
    [:label "db state"]
    [:pre (pprint @(rf/subscribe [::core/db :default-ctx]))]])
 

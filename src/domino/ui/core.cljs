@@ -75,6 +75,11 @@
  (fn [db [_ ctx-id]]
    (get-in db [::contexts ctx-id ::domino/db])))
 
+(rf/reg-sub
+  ::change-history
+  (fn [db [_ ctx-id]]
+    (get-in db [::contexts ctx-id ::domino/change-history])))
+
 (defn transact
   "runs a Domino transaction using the value from the specified component as the input"
   [db [_ ctx-id & id-value-pairs]]
