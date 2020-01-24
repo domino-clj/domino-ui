@@ -4,7 +4,9 @@
    [clojure.walk :refer [prewalk]]))
 
 (defn component? [node]
-  (and (vector? node) (= "domino.ui.component" (namespace (first node)))))
+  (and (vector? node)
+       (keyword? (first node))
+       (= "domino.ui.component" (namespace (first node)))))
 
 (defn render [context view]
   (prewalk
