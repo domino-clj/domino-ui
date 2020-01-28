@@ -1,4 +1,4 @@
-(defproject domino/ui "0.1.4"
+(defproject domino/ui "0.1.5"
             :description "UI component library for Domino"
             :url "https://github.com/domino-clj/domino-ui"
             :license {:name "Eclipse Public License"

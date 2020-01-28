@@ -38,6 +38,10 @@
                           :label "Full name"}]]
 
                        [:div
+                        [::component/addresses
+                         {:id :addresses}]]
+
+                       [:div
                         [:button
                          {:on-click #(rf/dispatch
                                        [::core/trigger
@@ -48,7 +52,8 @@
    :model   [[:demographics
               [:first-name {:id :first-name}]
               [:last-name {:id :last-name}]
-              [:full-name {:id :full-name}]]
+              [:full-name {:id :full-name}]
+              [:addresses {:id :addresses}]]
              [:text {:id :text}]]
    :effects [{:id :gen-text
               :outputs [:text]
@@ -119,7 +124,10 @@
    [alternate-ctx-page]])
 
 (defn mount-root []
-  (rf/dispatch-sync [::core/init-ctx :default-ctx default-schema {}])
+  (rf/dispatch-sync [::core/init-ctx :default-ctx default-schema
+                     {:demographics {:addresses
+                                     {"5a8bd5b9-0604-4d39-bc56-a6e76cd2bcab" {:city "Toronto"}
+                                      "6a8bd5b0-0604-4d39-bc56-a6e76cd2bcac" {:city "Ottawa"}}}}])
   (rf/dispatch-sync [::core/init-ctx :alt-ctx alt-schema {}])
   (r/render [home-page] (.getElementById js/document "app")))
 

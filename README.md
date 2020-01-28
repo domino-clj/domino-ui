@@ -152,7 +152,18 @@ Following events are provided
 
 #### transact values
 ```clojure
-@(rf/dispatch [::core/transact :default-ctx
+@(rf/dispatch [::core/transact
+               :default-ctx
+               [:first-name "Bob"]
+               [:last-name "Bobberton"]])
+
+
+;;transact with a callback
+@(rf/dispatch [::core/transact
+               :default-ctx
+               {:on-transact
+                (fn [ctx]
+                  (println "changes:" (::domino/change-history ctx)))}
                [:first-name "Bob"]
                [:last-name "Bobberton"]])
 ```

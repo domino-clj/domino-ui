@@ -6,17 +6,17 @@
 
 (defn init-context
   "create a new Domino UI context"
-  [db [_ ctx-id schema initial-state]]
+  [db [_ context-id schema initial-state]]
   (update
-    db
-    ::contexts
-    assoc
-    ctx-id
-    (-> (domino/initialize schema initial-state)
-        (assoc ::views (reduce
-                         (fn [views [id view]]
-                           (assoc views id (view/render ctx-id view)))
-                         {} (:views schema))))))
+   db
+   ::contexts
+   assoc
+   context-id
+   (assoc (domino/initialize schema initial-state)
+          ::views (reduce
+                   (fn [views [id view]]
+                     (assoc views id (view/render context-id view)))
+                   {} (:views schema)))))
 
 (rf/reg-event-db ::init-ctx init-context)
 
@@ -80,17 +80,44 @@
   (fn [db [_ ctx-id]]
     (get-in db [::contexts ctx-id ::domino/change-history])))
 
+(rf/reg-event-db
+ ::transact-path
+ (fn [db [_ ctx-id & more]]
+   (let [[opts path-value-pairs] (if (map? (first more))
+                                 [(first more) (rest more)]
+                                 [nil more])]
+     (update-in db [::contexts ctx-id]
+                (fn [ctx]
+                  (let [result (domino/transact ctx path-value-pairs)]
+                    (when-let [on-transact (:on-transact opts)]
+                      (on-transact result))
+                    result))))))
+
 (defn transact
   "runs a Domino transaction using the value from the specified component as the input"
-  [db [_ ctx-id & id-value-pairs]]
-  (update-in db [::contexts ctx-id]
-             domino/transact
-             (map
-               (fn [[component-id value]]
-                 [(get-in db [::contexts ctx-id ::domino/model :id->path component-id]) value])
-               id-value-pairs)))
+  [db [_ ctx-id & more]]
+  (let [[opts id-value-pairs] (if (map? (first more))
+                                [(first more) (rest more)]
+                                [nil more])]
+    (update-in db [::contexts ctx-id]
+               (fn [ctx]
+                 (let [result (domino/transact
+                               ctx
+                               (map
+                                (fn [[component-id value]]
+                                  [(get-in db [::contexts ctx-id ::domino/model :id->path component-id]) value])
+                                id-value-pairs))]
+                   (when-let [on-transact (:on-transact opts)]
+                     (on-transact result))
+                   result)))))
 
 (rf/reg-event-db ::transact transact)
+
+
+(rf/reg-sub
+ ::subscribe-path
+ (fn [db [_ ctx-id path]]
+   (get-in (get-in db [::contexts ctx-id ::domino/db]) path)))
 
 (defn get-value
   "gets the value of the specified component"
